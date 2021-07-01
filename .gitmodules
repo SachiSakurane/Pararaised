@@ -1,0 +1,6 @@
+[submodule "iPlug2"]
+	path = iPlug2
+	url = https://github.com/iPlug2/iPlug2.git
+[submodule "ext/usagi"]
+	path = ext/usagi
+	url = git@github.com:SachiSakurane/usagi.git
