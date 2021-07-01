@@ -2,8 +2,8 @@
 #include "IPlug_include_in_plug_src.h"
 #include "IControls.h"
 
-Pararaised::Pararaised(const InstanceInfo& info)
-: Plugin(info, MakeConfig(kNumParams, kNumPresets))
+PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
+    : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
   GetParam(kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
 
@@ -24,7 +24,7 @@ Pararaised::Pararaised(const InstanceInfo& info)
 }
 
 #if IPLUG_DSP
-void Pararaised::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
+void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int nFrames)
 {
   const double gain = GetParam(kGain)->Value() / 100.;
   const int nChans = NOutChansConnected();

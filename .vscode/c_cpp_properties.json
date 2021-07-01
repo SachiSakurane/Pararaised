@@ -1,0 +1,60 @@
+{
+    "env": {
+        "commonIncludePaths": [
+            "${workspaceFolder}/Pararaised/.",
+            "${workspaceFolder}/Pararaised/**",
+            "${workspaceFolder}/Pararaised/src/**",
+            "${workspaceFolder}/iPlug2/WDL/**",
+            "${workspaceFolder}/iPlug2/IPlug/**",
+            "${workspaceFolder}/iPlug2/IGraphics/**",
+            "${workspaceFolder}/iPlug2/Dependencies/**",
+            "${workspaceFolder}/ext/riw/include",
+            "${workspaceFolder}/ext/usagi/include"
+        ],
+        "commonDefs": [
+            "APP_API",
+            "IPLUG_DSP=1",
+            "IPLUG_EDITOR=1",
+            "IGRAPHICS_SKIA",
+            "NOMINMAX"
+        ]
+      },
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${commonIncludePaths}",
+                "${workspaceFolder}/iPlug2/Dependencies/Build/mac/include/**",
+                "${workspaceFolder}/vcpkg/installed/x64-osx/include",
+                "/usr/local/boost/1.76.0/include"
+            ],
+            "defines": [
+                "${commonDefs}",
+                "OS_MAC",
+                "IGRAPHICS_METAL"
+            ],
+            "macFrameworkPath": [],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++20"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${commonIncludePaths}",
+                "${workspaceFolder}iPlug2/Dependencies/Build/src/**"
+            ],
+            "defines": [
+                "${commonDefs}",
+                "OS_WIN",
+                "IGRAPHICS_GL2"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++20"
+        }
+    ],
+    "version": 4
+}

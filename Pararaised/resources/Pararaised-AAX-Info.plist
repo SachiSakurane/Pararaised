@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Pararaised</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Pararaised v1.0.0 Copyright 2020 Acme Inc</string>
+	<string>Pararaised v0.0.1 Copyright 2021 execute projects</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.executeprojects.aax.Pararaised</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>TDMw</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>0.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>PTul</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>0.0.1</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSMinimumSystemVersion</key>

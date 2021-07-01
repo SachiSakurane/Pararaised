@@ -16,21 +16,21 @@
 			<key>sandboxSafe</key>
 			<true/>
 			<key>subtype</key>
-			<string>Ipef</string>
+			<string>NvWr</string>
 			<key>type</key>
 			<string>aufx</string>
 			<key>version</key>
-			<integer>65536</integer>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>AudioUnit Version</key>
-	<string>0x00010000</string>
+	<string>0x00000001</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>Pararaised</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Pararaised v1.0.0 Copyright 2020 Acme Inc</string>
+	<string>Pararaised v0.0.1 Copyright 2021 execute projects</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.executeprojects.audiounit.Pararaised</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -40,11 +40,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>0.0.1</string>
 	<key>CFBundleSignature</key>
-	<string>Ipef</string>
+	<string>NvWr</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>0.0.1</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSMinimumSystemVersion</key>
