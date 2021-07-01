@@ -1,6 +1,12 @@
 [submodule "iPlug2"]
 	path = iPlug2
-	url = https://github.com/iPlug2/iPlug2.git
+	url = git@github.com:iPlug2/iPlug2.git
+[submodule "ext/riw"]
+	path = ext/riw
+	url = git@github.com:SachiSakurane/riw.git
 [submodule "ext/usagi"]
 	path = ext/usagi
 	url = git@github.com:SachiSakurane/usagi.git
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/Microsoft/vcpkg.git
