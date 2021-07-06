@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.ixx": "cpp",
+    "ranges": "cpp",
+    "__functional_03": "cpp"
+  }
+}
