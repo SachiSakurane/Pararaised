@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <usagi/concepts.hpp>
 #include <usagi/wrapper/icontrol/view_wrapper.hpp>
 
 #include "SkPath.h"
@@ -16,7 +17,7 @@ namespace views
     using rect_type = base_type::rect_type;
     using draw_context_type = base_type::draw_context_type;
 
-    slider(const rect_type &frame) : base_type{frame} {}
+    slider(const usagi::concepts::geometry::rect_concept auto &frame) : base_type{frame} {}
 
     void draw(draw_context_type &context) override
     {
@@ -27,14 +28,12 @@ namespace views
             SkPaint paint;
             paint.setAntiAlias(true);
             paint.setStyle(SkPaint::kStroke_Style);
-            paint.setStrokeWidth(20);
+            paint.setStrokeWidth(2);
             paint.setStrokeCap(SkPaint::kRound_Cap);
             paint.setColor(SK_ColorCYAN);
 
-            std::cout << "{" << f.l() << "," << f.t() << "," << f.r() << "," << f.b() << "}" << std::endl;
-
             SkCanvas *canvas = static_cast<SkCanvas *>(g.GetDrawContext());
-            SkPath path = SkPath::Line({f.l(), 100}, {f.r(), 100});
+            SkPath path = SkPath::Line({f.l(), f.t()}, {f.r(), f.t()});
 
             canvas->drawPath(path, paint);
           });
@@ -42,4 +41,4 @@ namespace views
 
   private:
   };
-} // namespace view
+}
