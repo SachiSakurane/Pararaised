@@ -25,6 +25,7 @@ namespace controls
           usagi::ui::surfaced<usagi::wrapper::icontrol::iplug_traits::base_view_type>(
               [](auto &context, const auto &v)
               {
+                SkAutoCanvasRestore restore{&context, true};
                 context.saveLayer(nullptr, nullptr);
 
                 SkPaint paint;

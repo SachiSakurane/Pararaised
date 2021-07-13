@@ -26,6 +26,7 @@ namespace views
 
     void draw(draw_context_type &context) override
     {
+      SkAutoCanvasRestore restore{&context, true};
       context.saveLayer(nullptr, nullptr);
 
       auto f = frame();
