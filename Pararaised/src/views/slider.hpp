@@ -26,26 +26,26 @@ namespace views
 
     void draw(draw_context_type &context) override
     {
-      context.draw(
-          [this](auto &g)
-          {
-            auto f = frame();
-            auto [width, height] = f.size()();
-            SkPaint src, dst;
-            SkCanvas *canvas = static_cast<SkCanvas *>(g.GetDrawContext());
+      context.saveLayer(nullptr, nullptr);
 
-            canvas->clear(SK_ColorTRANSPARENT);
-            canvas->drawRRect(SkRRect::MakeRectXY(usagi::wrapper::skia::to_rect(f), height * 0.5f, height * 0.5f), dst);
+      auto f = frame();
+      auto [width, height] = f.size()();
+      SkPaint src, dst;
 
-            // background
-            src.setBlendMode(SkBlendMode::kSrcIn);
-            src.setColor(SK_ColorLTGRAY);
-            canvas->drawPaint(src);
+      context.clear(SK_ColorTRANSPARENT);
+      context.drawRRect(SkRRect::MakeRectXY(usagi::wrapper::skia::to_rect(f), height * 0.5f, height * 0.5f), dst);
 
-            // colored
-            src.setColor(SK_ColorGRAY);
-            canvas->drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, normalized_value() * width)), src);
-          });
+      // background
+      src.setBlendMode(SkBlendMode::kSrcIn);
+      src.setColor(SK_ColorLTGRAY);
+      context.drawPaint(src);
+
+      // colored
+      src.setColor(SK_ColorGRAY);
+      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, normalized_value() * width)), src);
+
+      // knob
+
     }
 
   private:
