@@ -2,7 +2,7 @@
 #include "IPlug_include_in_plug_src.h"
 #include "IControls.h"
 
-#include "src/controls/app_view.hpp"
+#include "src/controls/sandbox.hpp"
 
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     : Plugin(info, MakeConfig(kNumParams, 0))
@@ -20,7 +20,7 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
 
     const IRECT b = pGraphics->GetBounds();
-    pGraphics->AttachControl(new controls::app_view{b});
+    pGraphics->AttachControl(new controls::sandbox{b});
   };
 #endif
 }

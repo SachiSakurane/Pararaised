@@ -46,7 +46,9 @@ namespace views
       context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, normalized_value() * width)), src);
 
       // knob
-
+      SkPaint knob;
+      knob.setColor(SK_ColorWHITE);
+      context.drawCircle({f.l() + normalized_value() * width, f.center().y()}, 6.f, knob);
     }
 
   private:
