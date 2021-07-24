@@ -3,6 +3,7 @@
 #include "IControls.h"
 
 #include "src/controls/sandbox.hpp"
+#include "src/controls/tiles.hpp"
 
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     : Plugin(info, MakeConfig(kNumParams, 0))
@@ -21,6 +22,7 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
     const IRECT b = pGraphics->GetBounds();
     pGraphics->AttachControl(new controls::sandbox{b});
+    // pGraphics->AttachControl(new controls::tiles{b});
   };
 #endif
 }
