@@ -3,7 +3,7 @@
 #include "IControls.h"
 
 #include "src/controls/sandbox.hpp"
-#include "src/controls/tiles.hpp"
+#include "src/controls/box.hpp"
 
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     : Plugin(info, MakeConfig(kNumParams, 0))
@@ -20,9 +20,11 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     pGraphics->AttachPanelBackground(COLOR_GRAY);
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
 
+    pGraphics->EnableMouseOver(true);
+
     const IRECT b = pGraphics->GetBounds();
     pGraphics->AttachControl(new controls::sandbox{b});
-    // pGraphics->AttachControl(new controls::tiles{b});
+    // pGraphics->AttachControl(new controls::box{b});
   };
 #endif
 }

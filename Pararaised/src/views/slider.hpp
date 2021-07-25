@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
+#include <riw/algorithm/inverse.h>
 #include <usagi/concepts.hpp>
 #include <usagi/geometry.hpp>
 #include <usagi/wrapper/icontrol/view_wrapper.hpp>
@@ -14,15 +16,16 @@ namespace views
   // knob ないやつは progress かも
   class slider final : public usagi::wrapper::icontrol::iplug_traits::base_view_type
   {
-    using base_type = usagi::wrapper::icontrol::iplug_traits::base_view_type;
+    using traits_type = usagi::wrapper::icontrol::iplug_traits;
+    const float kKnobSize = 6.f;
 
   public:
-    using rect_type = base_type::rect_type;
-    using draw_context_type = base_type::draw_context_type;
+    using rect_type = traits_type::base_view_type::rect_type;
+    using draw_context_type = traits_type::base_view_type::draw_context_type;
 
-    slider(const usagi::concepts::geometry::rect_concept auto &frame) : base_type{frame} {}
+    slider(const usagi::concepts::geometry::rect_concept auto &frame) : traits_type::base_view_type{frame} {}
 
-    float normalized_value() { return 0.5f; }
+    traits_type::value_type normalized_value() { return value; }
 
     void draw(draw_context_type &context) override
     {
@@ -43,14 +46,82 @@ namespace views
 
       // colored
       src.setColor(SK_ColorGRAY);
-      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, normalized_value() * width)), src);
+      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, riw::inverse(normalized_value()) * width)), src);
 
       // knob
       SkPaint knob;
       knob.setColor(SK_ColorWHITE);
-      context.drawCircle({f.l() + normalized_value() * width, f.center().y()}, 6.f, knob);
+      context.drawCircle({f.l() + normalized_value() * width, f.center().y()}, kKnobSize, knob);
+    }
+
+    void event(typename mouse_traits::on_down_type mouse) override
+    {
+      if (usagi::geometry::contain(
+              usagi::geometry::from_height(frame(), kKnobSize * 4.f),
+              point_type{mouse.x, mouse.y}))
+      {
+        is_click = true;
+        position_to_value(mouse.x);
+      }
+    }
+
+    void event(typename mouse_traits::on_drag_type mouse) override
+    {
+      if (is_click)
+      {
+        position_to_value(mouse.x);
+        if (auto g = mouse.graphics)
+        {
+          g->SetMouseCursor(ECursor::SIZEWE);
+        }
+      }
+    }
+
+    void event(typename mouse_traits::on_up_type mouse) override
+    {
+      if (is_click)
+      {
+        position_to_value(mouse.x);
+        is_click = false;
+        if (auto g = mouse.graphics)
+        {
+          g->SetMouseCursor();
+        }
+      }
+    }
+
+    void event(typename mouse_traits::on_over_type mouse) override
+    {
+      if (auto g = mouse.graphics)
+      {
+        if (usagi::geometry::contain(
+                usagi::geometry::from_height(frame(), kKnobSize * 4.f),
+                point_type{mouse.x, mouse.y}))
+        {
+          g->SetMouseCursor(ECursor::HAND);
+        }
+        else
+        {
+          g->SetMouseCursor();
+        }
+      }
+    }
+
+    void event(typename mouse_traits::on_out_type mouse) override
+    {
+      if (auto g = mouse.graphics)
+      {
+        g->SetMouseCursor();
+      }
     }
 
   private:
+    bool is_click{false};
+    traits_type::value_type value{0.0f};
+
+    void position_to_value(traits_type::value_type v)
+    {
+      value = std::clamp((v - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
+    }
   };
 }

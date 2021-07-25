@@ -23,11 +23,8 @@ namespace controls
           { SetDirty(false); },
           16));
 
-      auto f = local_view.frame();
-      auto padding = usagi::geometry::padding(f, 16.f);
-
-      local_view.add_sub_view(
-          traits_type::base_view_type{padding} |
+      auto &view = local_view.add_sub_view(
+          traits_type::base_view_type{usagi::geometry::padding(local_view.frame(), 16.f)} |
           usagi::ui::surfaced(
               [](auto &context, const auto &v)
               {
@@ -37,16 +34,16 @@ namespace controls
                 SkPaint paint;
                 paint.setColor(SK_ColorCYAN);
                 context.drawRect(usagi::wrapper::skia::to_rect(v.frame()), paint);
-              }) |
+              })/* |
           usagi::ui::gestured(
               [](traits_type::mouse_traits::on_down_type mouse, auto &v)
               {
                 if (usagi::geometry::contain(v.frame(), traits_type::point_type{mouse.x, mouse.y}))
                   std::cout << "tapped" << std::endl;
-              }));
+              })*/);
 
-      local_view.add_sub_view(views::slider{
-          usagi::geometry::from_top(usagi::geometry::padding(padding, 16.f), 4.f)});
+      view.add_sub_view(views::slider{
+          usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f)});
     }
 
   private:
