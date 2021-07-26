@@ -62,6 +62,10 @@ namespace views
       {
         is_click = true;
         position_to_value(mouse.x);
+        if (auto g = mouse.graphics)
+        {
+          g->HideMouseCursor(true, false);
+        }
       }
     }
 
@@ -70,10 +74,6 @@ namespace views
       if (is_click)
       {
         position_to_value(mouse.x);
-        if (auto g = mouse.graphics)
-        {
-          g->SetMouseCursor(ECursor::SIZEWE);
-        }
       }
     }
 
@@ -85,7 +85,11 @@ namespace views
         is_click = false;
         if (auto g = mouse.graphics)
         {
-          g->SetMouseCursor();
+          float v = normalized_value();
+          auto f = frame();
+          g->MoveMouseCursor(v * f.size().width() + f.l(), f.center().y());
+          g->HideMouseCursor(false);
+          g->SetMouseCursor(ECursor::HAND);
         }
       }
     }
