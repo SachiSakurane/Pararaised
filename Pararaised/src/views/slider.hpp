@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include <riw/algorithm/inverse.h>
+#include <riw/algorithm/inverse.hpp>
 #include <usagi/concepts.hpp>
 #include <usagi/geometry.hpp>
 #include <usagi/wrapper/icontrol/view_wrapper.hpp>

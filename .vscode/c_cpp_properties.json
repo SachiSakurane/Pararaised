@@ -8,8 +8,8 @@
             "${workspaceFolder}/iPlug2/IPlug/**",
             "${workspaceFolder}/iPlug2/IGraphics/**",
             "${workspaceFolder}/iPlug2/Dependencies/**",
-            "${workspaceFolder}/ext/riw/include",
-            "${workspaceFolder}/ext/usagi/include"
+            "${workspaceFolder}/ext/riw/include/**",
+            "${workspaceFolder}/ext/usagi/include/**"
         ],
         "commonDefs": [
             "APP_API",
@@ -24,8 +24,6 @@
             "name": "Mac",
             "includePath": [
                 "${commonIncludePaths}",
-                "${workspaceFolder}/iPlug2/Dependencies/Build/mac/include/**",
-                "${workspaceFolder}/vcpkg/installed/x64-osx/include",
                 "/usr/local/boost/1.76.0/include"
             ],
             "defines": [

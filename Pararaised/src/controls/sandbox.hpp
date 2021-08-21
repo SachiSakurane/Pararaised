@@ -1,6 +1,6 @@
 #pragma once
 
-#include <riw/utility/noncopyable.h>
+#include <riw/utility/noncopyable.hpp>
 #include <usagi/geometry.hpp>
 #include <usagi/ui/gesture.hpp>
 #include <usagi/ui/surface.hpp>
