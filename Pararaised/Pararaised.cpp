@@ -23,7 +23,7 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     pGraphics->EnableMouseOver(true);
 
     const IRECT b = pGraphics->GetBounds();
-    pGraphics->AttachControl(new controls::anime_test{b});
+    pGraphics->AttachControl(new controls::sandbox{b});
     // pGraphics->AttachControl(new controls::box{b});
   };
 #endif
