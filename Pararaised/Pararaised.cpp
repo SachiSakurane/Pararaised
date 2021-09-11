@@ -41,4 +41,9 @@ void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int nFrame
     }
   }
 }
+
+void PLUG_CLASS_NAME::OnReset() 
+{
+  
+}
 #endif

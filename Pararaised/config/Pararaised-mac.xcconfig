@@ -13,9 +13,10 @@ IPLUG2_ROOT = ../../iPlug2
 // the basename of the vst, vst3, app, component, aaxplugin
 BINARY_NAME = Pararaised
 
+OWLE_INCLUDE_PATH = $(PROJECT_ROOT)/../ext/owle/include
 RIW_INCLUDE_PATH = $(PROJECT_ROOT)/../ext/riw/include
 USAGI_INCLUDE_PATH = $(PROJECT_ROOT)/../ext/usagi/include
-LOCAL_EXTRA_INCLUDE_PATHS = $(RIW_INCLUDE_PATH) $(USAGI_INCLUDE_PATH)
+LOCAL_EXTRA_INCLUDE_PATHS = $(OWLE_INCLUDE_PATH) $(RIW_INCLUDE_PATH) $(USAGI_INCLUDE_PATH)
 
 // ------------------------------
 // HEADER AND LIBRARY SEARCH PATHS

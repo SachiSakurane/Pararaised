@@ -8,6 +8,7 @@
             "${workspaceFolder}/iPlug2/IPlug/**",
             "${workspaceFolder}/iPlug2/IGraphics/**",
             "${workspaceFolder}/iPlug2/Dependencies/**",
+            "${workspaceFolder}/ext/owle/include/**",
             "${workspaceFolder}/ext/riw/include/**",
             "${workspaceFolder}/ext/usagi/include/**"
         ],

@@ -13,3 +13,6 @@
 [submodule "ext/q"]
 	path = ext/q
 	url = git@github.com:cycfi/q.git
+[submodule "ext/owle"]
+	path = ext/owle
+	url = git@github.com:SachiSakurane/owle.git
