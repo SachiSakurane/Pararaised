@@ -10,12 +10,19 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 {
   GetParam(kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
 
+  store.gain.get_observable().distinct_until_changed().subscribe(
+      [&](auto v)
+      { GetParam(kGain)->SetNormalized(v); }) |
+      riw::disposed(bag);
+
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
-  mMakeGraphicsFunc = [&]() {
+  mMakeGraphicsFunc = [&]()
+  {
     return MakeGraphics(*this, PLUG_WIDTH, PLUG_HEIGHT, PLUG_FPS, GetScaleForScreen(PLUG_WIDTH, PLUG_HEIGHT));
   };
-  
-  mLayoutFunc = [&](IGraphics* pGraphics) {
+
+  mLayoutFunc = [&](IGraphics *pGraphics)
+  {
     pGraphics->AttachCornerResizer(EUIResizerMode::Scale, false);
     pGraphics->AttachPanelBackground(COLOR_GRAY);
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
@@ -23,27 +30,42 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     pGraphics->EnableMouseOver(true);
 
     const IRECT b = pGraphics->GetBounds();
-    pGraphics->AttachControl(new controls::sandbox{b});
+    pGraphics->AttachControl(new controls::sandbox{action, b});
     // pGraphics->AttachControl(new controls::box{b});
   };
 #endif
 }
 
-#if IPLUG_DSP
-void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int nFrames)
+void PLUG_CLASS_NAME::OnParamChangeUI(int paramIdx, EParamSource source)
 {
-  const double gain = GetParam(kGain)->Value() / 100.;
-  const int nChans = NOutChansConnected();
-  
-  for (int s = 0; s < nFrames; s++) {
-    for (int c = 0; c < nChans; c++) {
-      outputs[c][s] = inputs[c][s] * gain;
-    }
+  switch (paramIdx)
+  {
+  case kGain:
+    store.gain.get_subscriber().on_next(GetParam(kGain)->GetNormalized());
+    break;
+  default:
+    break;
   }
 }
 
-void PLUG_CLASS_NAME::OnReset() 
+#if IPLUG_DSP
+void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
-  
+  const double gain = GetParam(kGain)->Value() / 100.;
+  const int channels = NOutChansConnected();
+
+  for (int s = 0; s < frames; s++)
+  {
+    for (int c = 0; c < channels; c++)
+    {
+      outputs[c][s] = inputs[c][s] * gain;
+    }
+  }
+    
+    std::cout << GetParam(kGain)->Value() << std::endl;
+}
+
+void PLUG_CLASS_NAME::OnReset()
+{
 }
 #endif

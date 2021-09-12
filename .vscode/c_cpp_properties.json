@@ -10,6 +10,7 @@
             "${workspaceFolder}/iPlug2/Dependencies/**",
             "${workspaceFolder}/ext/owle/include/**",
             "${workspaceFolder}/ext/riw/include/**",
+            "${workspaceFolder}/ext/rxcpp/Rx/v2/src/**",
             "${workspaceFolder}/ext/usagi/include/**"
         ],
         "commonDefs": [

@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <riw/algorithm/inverse.hpp>
+#include <riw/rxcpp.hpp>
 #include <usagi/concepts.hpp>
 #include <usagi/geometry.hpp>
 #include <usagi/wrapper/icontrol/view_wrapper.hpp>
@@ -23,9 +24,11 @@ namespace views
     using rect_type = traits_type::base_view_type::rect_type;
     using draw_context_type = traits_type::base_view_type::draw_context_type;
 
-    slider(const usagi::concepts::geometry::rect_concept auto &frame) : traits_type::base_view_type{frame} {}
+    slider(const usagi::concepts::geometry::rect_concept auto &frame, std::function<void(traits_type::value_type)> observe) : traits_type::base_view_type{frame} {
+      proportion.get_observable().subscribe(observe) | riw::disposed(bag);
+    }
 
-    traits_type::value_type normalized_value() { return value; }
+    traits_type::value_type get_proportion() { return proportion.get_value(); }
 
     void draw(draw_context_type &context) override
     {
@@ -46,12 +49,12 @@ namespace views
 
       // colored
       src.setColor(SK_ColorGRAY);
-      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, riw::inverse(normalized_value()) * width)), src);
+      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, riw::inverse(get_proportion()) * width)), src);
 
       // knob
       SkPaint knob;
       knob.setColor(SK_ColorWHITE);
-      context.drawCircle({f.l() + normalized_value() * width, f.center().y()}, kKnobSize, knob);
+      context.drawCircle({f.l() + get_proportion() * width, f.center().y()}, kKnobSize, knob);
     }
 
     void event(typename mouse_traits::on_down_type mouse) override
@@ -61,7 +64,7 @@ namespace views
               point_type{mouse.x, mouse.y}))
       {
         is_click = true;
-        position_to_value(mouse.x);
+        position_to_proportion(mouse.x);
         if (auto g = mouse.graphics)
         {
           g->HideMouseCursor(true, false);
@@ -73,7 +76,7 @@ namespace views
     {
       if (is_click)
       {
-        position_to_value(mouse.x);
+        position_to_proportion(mouse.x);
       }
     }
 
@@ -81,13 +84,13 @@ namespace views
     {
       if (is_click)
       {
-        position_to_value(mouse.x);
+        position_to_proportion(mouse.x);
         is_click = false;
         if (auto g = mouse.graphics)
         {
-          float v = normalized_value();
+          float p = get_proportion();
           auto f = frame();
-          g->MoveMouseCursor(v * f.size().width() + f.l(), f.center().y());
+          g->MoveMouseCursor(p * f.size().width() + f.l(), f.center().y());
           g->HideMouseCursor(false);
           g->SetMouseCursor(ECursor::HAND);
         }
@@ -119,13 +122,15 @@ namespace views
       }
     }
 
+    const rxcpp::subjects::behavior<traits_type::value_type> proportion{0.0f};
   private:
+    riw::dispose_bag bag;
     bool is_click{false};
-    traits_type::value_type value{0.0f};
 
-    void position_to_value(traits_type::value_type v)
+    void position_to_proportion(traits_type::value_type p)
     {
-      value = std::clamp((v - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
+      auto new_proportion = std::clamp((p - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
+      proportion.get_subscriber().on_next(new_proportion);
     }
   };
 }

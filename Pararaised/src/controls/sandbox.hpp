@@ -11,12 +11,13 @@
 
 namespace controls
 {
-  class sandbox : public usagi::wrapper::icontrol::view_wrapper, private riw::noncopyable<sandbox>
+  template <class ActionType>
+  class sandbox : public usagi::wrapper::icontrol::view_wrapper, private riw::noncopyable<sandbox<ActionType>>
   {
     using traits_type = usagi::wrapper::icontrol::iplug_traits;
 
   public:
-    sandbox(const IRECT &bounds) : usagi::wrapper::icontrol::view_wrapper{bounds}
+    sandbox(const ActionType &a, const IRECT &bounds) : action{a}, usagi::wrapper::icontrol::view_wrapper{bounds}
     {
       timer = std::unique_ptr<Timer>(Timer::Create(
           [&](Timer &t)
@@ -34,19 +35,29 @@ namespace controls
                 SkPaint paint;
                 paint.setColor(SK_ColorCYAN);
                 context.drawRect(usagi::wrapper::skia::to_rect(v.frame()), paint);
-              })/* |
+              }) /* |
           usagi::ui::gestured(
               [](traits_type::mouse_traits::on_down_type mouse, auto &v)
               {
                 if (usagi::geometry::contain(v.frame(), traits_type::point_type{mouse.x, mouse.y}))
                   std::cout << "tapped" << std::endl;
-              })*/);
+              })*/
+      );
 
-      view.add_sub_view(views::slider{
-          usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f)});
+      view.add_sub_view(
+          views::slider{
+              usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f),
+              [&action = this->action](traits_type::value_type v)
+              {
+                action.update_gain(v);
+              }});
     }
 
   private:
+    const ActionType &action;
     std::unique_ptr<Timer> timer;
   };
+
+  template <class ActionType>
+  sandbox(const ActionType &, const IRECT &) -> sandbox<ActionType>;
 }

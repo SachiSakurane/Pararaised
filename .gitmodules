@@ -10,9 +10,9 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/Microsoft/vcpkg.git
-[submodule "ext/q"]
-	path = ext/q
-	url = git@github.com:cycfi/q.git
 [submodule "ext/owle"]
 	path = ext/owle
 	url = git@github.com:SachiSakurane/owle.git
+[submodule "ext/rxcpp"]
+	path = ext/rxcpp
+	url = git@github.com:ReactiveX/RxCpp.git
