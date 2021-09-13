@@ -10,8 +10,8 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 {
   GetParam(module::dsp::parameters::kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
 
-  action.set_parameter([&](module::dsp::parameters index, double v)
-                       { SendParameterValueFromUI(index, v); });
+  action.set_parameter([&](module::dsp::parameters index, type::normalized<sample> normalized)
+                       { SendParameterValueFromUI(index, normalized); });
 
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
   mMakeGraphicsFunc = [&]()
@@ -36,6 +36,7 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
 void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
 {
+  // ここで value -> normalized の変換がされている
   action.update_parameter(paramIdx, GetParam(paramIdx)->GetNormalized());
 }
 
