@@ -37,7 +37,7 @@ namespace module::dsp
           riw::disposed(bag);
     }
 
-    void update_parameter(int index, type::normalized<sample> normalized)
+    void update_parameter(int index, type::normalized<SampleType> normalized)
     {
       switch (index)
       {
