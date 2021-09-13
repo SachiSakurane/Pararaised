@@ -14,23 +14,29 @@ namespace module::dsp
     kNumParameters
   };
 
-  template <class Behavior>
-  class x
+  template <class ValueType>
+  class memo
   {
   public:
+    template <class Observable>
+    explicit memo(Observable o)
+    {
+      o.subscribe([&](ValueType v)
+                  { value = v; }) |
+          riw::disposed(bag);
+    }
+
+    ValueType value;
+
   private:
+    riw::dispose_bag bag;
   };
 
   template <class StoreType, class SampleType>
   class action : private riw::noncopyable<action<StoreType, SampleType>>
   {
   public:
-    explicit action(const StoreType &s) : store{s}
-    {
-      store.gain.get_observable().subscribe([&](auto v)
-                                            { memo_gain = v; }) |
-          riw::disposed(bag);
-    }
+    explicit action(const StoreType &s) : store{s} {}
 
     void set_parameter(std::function<void(module::dsp::parameters, double)> func)
     {
@@ -45,7 +51,7 @@ namespace module::dsp
       switch (index)
       {
       case parameters::kGain:
-        memo_gain = value;
+        memo_gain.value = value;
         break;
       default:
         break;
@@ -57,11 +63,11 @@ namespace module::dsp
       store.gain.get_subscriber().on_next(v);
     }
 
-    decltype(auto) gain() const { return memo_gain; }
+    decltype(auto) gain() const { return memo_gain.value; }
 
   private:
     riw::dispose_bag bag;
     const StoreType &store;
-    SampleType memo_gain;
+    memo<SampleType> memo_gain{store.gain.get_observable()};
   };
 }
