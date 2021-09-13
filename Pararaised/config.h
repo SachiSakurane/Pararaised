@@ -3,7 +3,7 @@
 #define PLUG_VERSION_HEX 0x00000001
 #define PLUG_VERSION_STR "0.0.1"
 #define PLUG_UNIQUE_ID 'NvWr'
-#define PLUG_MFR_ID 'Acme'
+#define PLUG_MFR_ID 'Exec'
 #define PLUG_URL_STR "https://twitter.com/sakurane_sachi"
 #define PLUG_EMAIL_STR "sakuranesachi@gmail.com"
 #define PLUG_COPYRIGHT_STR "Copyright 2021 execute projects"

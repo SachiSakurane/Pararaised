@@ -15,6 +15,7 @@
 namespace views
 {
   // knob ないやつは progress かも
+  template <class ActionType>
   class slider final : public usagi::wrapper::icontrol::iplug_traits::base_view_type
   {
     using traits_type = usagi::wrapper::icontrol::iplug_traits;
@@ -24,11 +25,11 @@ namespace views
     using rect_type = traits_type::base_view_type::rect_type;
     using draw_context_type = traits_type::base_view_type::draw_context_type;
 
-    slider(const usagi::concepts::geometry::rect_concept auto &frame, std::function<void(traits_type::value_type)> observe) : traits_type::base_view_type{frame} {
-      proportion.get_observable().subscribe(observe) | riw::disposed(bag);
+    slider(const usagi::concepts::geometry::rect_concept auto &frame, const ActionType& a) : traits_type::base_view_type{frame}, action{a}
+    {
     }
 
-    traits_type::value_type get_proportion() { return proportion.get_value(); }
+    traits_type::value_type get_proportion() { return action.gain(); }
 
     void draw(draw_context_type &context) override
     {
@@ -122,15 +123,14 @@ namespace views
       }
     }
 
-    const rxcpp::subjects::behavior<traits_type::value_type> proportion{0.0f};
   private:
-    riw::dispose_bag bag;
+    const ActionType& action;
     bool is_click{false};
 
     void position_to_proportion(traits_type::value_type p)
     {
       auto new_proportion = std::clamp((p - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
-      proportion.get_subscriber().on_next(new_proportion);
+      action.update_gain(new_proportion);
     }
   };
 }

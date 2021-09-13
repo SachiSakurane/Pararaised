@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include <riw/utility/noncopyable.hpp>
@@ -18,6 +19,8 @@ namespace module::dsp
     {
       store.gain.get_subscriber().on_next(v);
     }
+
+    SampleType gain() const { return store.gain.get_value(); }
 
   private:
     const StoreType &store;

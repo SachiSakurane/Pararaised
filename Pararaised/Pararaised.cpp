@@ -12,7 +12,10 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
   store.gain.get_observable().distinct_until_changed().subscribe(
       [&](auto v)
-      { GetParam(kGain)->SetNormalized(v); }) |
+      {
+        GetParam(kGain)->SetNormalized(v);
+        SendParameterValueFromUI(kGain, v);
+      }) |
       riw::disposed(bag);
 
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
@@ -36,16 +39,14 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 #endif
 }
 
+void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
+{
+  action.update_gain(GetParam(kGain)->GetNormalized());
+}
+
 void PLUG_CLASS_NAME::OnParamChangeUI(int paramIdx, EParamSource source)
 {
-  switch (paramIdx)
-  {
-  case kGain:
-    store.gain.get_subscriber().on_next(GetParam(kGain)->GetNormalized());
-    break;
-  default:
-    break;
-  }
+  action.update_gain(GetParam(kGain)->GetNormalized());
 }
 
 #if IPLUG_DSP
@@ -61,8 +62,6 @@ void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames
       outputs[c][s] = inputs[c][s] * gain;
     }
   }
-    
-    std::cout << GetParam(kGain)->Value() << std::endl;
 }
 
 void PLUG_CLASS_NAME::OnReset()

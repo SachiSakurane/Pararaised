@@ -44,13 +44,8 @@ namespace controls
               })*/
       );
 
-      view.add_sub_view(
-          views::slider{
-              usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f),
-              [&action = this->action](traits_type::value_type v)
-              {
-                action.update_gain(v);
-              }});
+      view.add_sub_view(views::slider{
+          usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f), action});
     }
 
   private:

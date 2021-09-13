@@ -20,6 +20,7 @@ class PLUG_CLASS_NAME final : public Plugin
 public:
   PLUG_CLASS_NAME(const InstanceInfo &info);
 
+  void OnParamChange(int paramIdx) override;
   void OnParamChangeUI(int paramIdx, EParamSource source) override;
 
 #if IPLUG_DSP // http://bit.ly/2S64BDd

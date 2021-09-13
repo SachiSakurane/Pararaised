@@ -2748,6 +2748,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST2-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WARNING_CFLAGS = "-Wno-main";
@@ -2767,6 +2768,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST2-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WARNING_CFLAGS = "-Wno-main";
@@ -2786,6 +2788,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST2-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WARNING_CFLAGS = "-Wno-main";
@@ -2915,6 +2918,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-AU-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(AU_FRAMEWORKS)",
 					"$(inherited)",
@@ -2943,6 +2947,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-AU-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(AU_FRAMEWORKS)",
 					"$(inherited)",
@@ -2971,6 +2976,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-AU-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(AU_FRAMEWORKS)",
 					"$(inherited)",
@@ -3283,6 +3289,7 @@
 					"$(VST3_SDK)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST3-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst3.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WRAPPER_EXTENSION = vst3;
@@ -3305,6 +3312,7 @@
 					"$(VST3_SDK)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST3-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst3.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WRAPPER_EXTENSION = vst3;
@@ -3327,6 +3335,7 @@
 					"$(VST3_SDK)",
 				);
 				INFOPLIST_FILE = "../resources/Pararaised-VST3-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.executeprojects.vst3.${BINARY_NAME}";
 				SKIP_INSTALL = NO;
 				WRAPPER_EXTENSION = vst3;

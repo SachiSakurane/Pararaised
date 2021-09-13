@@ -10,7 +10,7 @@
 			<key>factoryFunction</key>
 			<string>Pararaised_Factory</string>
 			<key>manufacturer</key>
-			<string>Acme</string>
+			<string>Exec</string>
 			<key>name</key>
 			<string>executeprojects: Pararaised</string>
 			<key>sandboxSafe</key>
