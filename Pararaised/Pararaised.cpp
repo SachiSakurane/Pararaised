@@ -6,17 +6,12 @@
 #include "src/controls/anime_test.hpp"
 
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
-    : Plugin(info, MakeConfig(kNumParams, 0))
+    : Plugin(info, MakeConfig(module::dsp::parameters::kNumParameters, 0))
 {
-  GetParam(kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
+  GetParam(module::dsp::parameters::kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
 
-  store.gain.get_observable().distinct_until_changed().subscribe(
-      [&](auto v)
-      {
-        GetParam(kGain)->SetNormalized(v);
-        SendParameterValueFromUI(kGain, v);
-      }) |
-      riw::disposed(bag);
+  action.set_parameter([&](module::dsp::parameters index, double v)
+                       { SendParameterValueFromUI(index, v); });
 
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
   mMakeGraphicsFunc = [&]()
@@ -41,18 +36,13 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
 void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
 {
-  action.update_gain(GetParam(kGain)->GetNormalized());
-}
-
-void PLUG_CLASS_NAME::OnParamChangeUI(int paramIdx, EParamSource source)
-{
-  action.update_gain(GetParam(kGain)->GetNormalized());
+  action.update_parameter(paramIdx, GetParam(paramIdx)->GetNormalized());
 }
 
 #if IPLUG_DSP
 void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
-  const double gain = GetParam(kGain)->Value() / 100.;
+  const double gain = GetParam(module::dsp::parameters::kGain)->Value() / 100.;
   const int channels = NOutChansConnected();
 
   for (int s = 0; s < frames; s++)

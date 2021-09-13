@@ -6,9 +6,8 @@
 namespace module::dsp
 {
   template <class SampleType>
-  class store : private riw::noncopyable<store<SampleType>>
+  struct store : private riw::noncopyable<store<SampleType>>
   {
-  public:
     const rxcpp::subjects::behavior<SampleType> gain{static_cast<SampleType>(0)};
   };
 }

@@ -6,12 +6,6 @@
 #include "src/module/store.hpp"
 #include "src/module/action.hpp"
 
-enum EParams
-{
-  kGain = 0,
-  kNumParams
-};
-
 using namespace iplug;
 using namespace igraphics;
 
@@ -21,7 +15,6 @@ public:
   PLUG_CLASS_NAME(const InstanceInfo &info);
 
   void OnParamChange(int paramIdx) override;
-  void OnParamChangeUI(int paramIdx, EParamSource source) override;
 
 #if IPLUG_DSP // http://bit.ly/2S64BDd
   void ProcessBlock(sample **inputs, sample **outputs, int nFrames) override;
@@ -29,7 +22,6 @@ public:
 #endif
 
 private:
-  riw::dispose_bag bag;
   module::store<sample> store;
   module::action<decltype(store), sample> action{store};
 };
