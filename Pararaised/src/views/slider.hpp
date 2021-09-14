@@ -133,6 +133,11 @@ namespace views
       }
     }
 
+    // TODO: reset
+    void event(typename mouse_traits::on_double_click_type mouse) override
+    {
+    }
+
   private:
     const ListenerType &listener;
     bool is_click{false};

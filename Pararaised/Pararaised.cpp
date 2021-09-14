@@ -8,7 +8,7 @@
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     : Plugin(info, MakeConfig(module::dsp::parameters::kNumParameters, 0))
 {
-  GetParam(module::dsp::parameters::kGain)->InitDouble("Gain", 0., 0., 100.0, 0.01, "%");
+  GetParam(module::dsp::parameters::kGain)->InitDouble("Gain", 75., 0., 100.0, 0.01, "%");
 
   action.set_parameter([&](module::dsp::parameters index, type::normalized<sample> normalized)
                        { SendParameterValueFromUI(index, normalized); });
