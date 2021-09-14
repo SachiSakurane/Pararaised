@@ -2,7 +2,8 @@
 
 #include <functional>
 
-#include "../type/parameters.hpp"
+#include "../type/parameter.hpp"
+#include "../type/unit.hpp"
 
 #include "IControls.h"
 
@@ -10,6 +11,7 @@ namespace module
 {
   struct injector
   {
-    std::function<iplug::IParam *(type::parameters)> get_iparam;
+    const std::function<void(type::parameters, type::normalized<double>)> send_parameter;
+    const std::function<iplug::IParam *(type::parameters)> get_iparam;
   };
 }

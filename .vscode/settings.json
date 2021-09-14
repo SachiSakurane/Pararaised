@@ -98,6 +98,7 @@
     "memory_resource": "cpp",
     "stop_token": "cpp",
     "csetjmp": "cpp",
-    "__functional_base_03": "cpp"
+    "__functional_base_03": "cpp",
+    "*.ipp": "cpp"
   }
 }

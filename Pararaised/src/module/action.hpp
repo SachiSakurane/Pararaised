@@ -3,7 +3,7 @@
 #include <riw/rxcpp/disposed.hpp>
 #include <riw/utility/noncopyable.hpp>
 
-#include "dsp/action.hpp"
+#include "processor/action.hpp"
 
 namespace module
 {
@@ -21,5 +21,5 @@ namespace module
   };
 
   template <class StoreType, class SampleType>
-  using action = base_action<StoreType, dsp::action<StoreType, SampleType>>;
+  using action = base_action<StoreType, processor::action<StoreType, SampleType>>;
 }

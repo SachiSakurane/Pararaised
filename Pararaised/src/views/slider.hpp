@@ -19,9 +19,10 @@ namespace views
   {
     typename SliderListener::value_type;
     {
-      listener()
+      listener.normalized()
       } -> std::same_as<typename SliderListener::value_type>;
-    listener.update(std::declval<typename SliderListener::value_type>());
+    listener.set_normalized(std::declval<typename SliderListener::value_type>());
+    listener.send();
   };
 
   // knob ないやつは progress かも
@@ -39,7 +40,7 @@ namespace views
     {
     }
 
-    traits_type::value_type get_proportion() { return listener(); }
+    traits_type::value_type get_proportion() { return listener.normalized(); }
 
     void draw(draw_context_type &context) override
     {
@@ -145,7 +146,8 @@ namespace views
     void position_to_proportion(traits_type::value_type p)
     {
       auto new_proportion = std::clamp((p - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
-      listener.update(new_proportion);
+      listener.set_normalized(new_proportion);
+      listener.send();
     }
   };
 

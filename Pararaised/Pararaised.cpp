@@ -9,14 +9,12 @@
 
 PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
     : Plugin(info, MakeConfig(type::parameters::kNumParameters, 0)),
-      store{module::injector{.get_iparam = [&](type::parameters index)
-                             { return GetParam(index); }}}
+      store{module::injector{
+          .send_parameter = [&](type::parameters index, type::normalized<double> normalized)
+          { SendParameterValueFromUI(index, normalized); },
+          .get_iparam = [&](type::parameters index)
+          { return GetParam(index); }}}
 {
-  GetParam(type::parameters::kGain)->InitDouble("Gain", 75., 0., 100.0, 0.01, "%");
-
-  action.set_parameter([&](type::parameters index, type::normalized<sample> normalized)
-                       { SendParameterValueFromUI(index, normalized); });
-
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
   mMakeGraphicsFunc = [&]()
   {
@@ -40,8 +38,6 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
 void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
 {
-  // ここで value -> normalized の変換がされている
-  action.update_parameter(paramIdx, GetParam(paramIdx)->GetNormalized());
 }
 
 #if IPLUG_DSP
