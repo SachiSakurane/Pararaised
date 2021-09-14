@@ -23,6 +23,7 @@ namespace views
       } -> std::same_as<typename SliderListener::value_type>;
     listener.set_normalized(std::declval<typename SliderListener::value_type>());
     listener.send();
+    listener.reset();
   };
 
   // knob ないやつは progress かも
@@ -134,9 +135,14 @@ namespace views
       }
     }
 
-    // TODO: reset
     void event(typename mouse_traits::on_double_click_type mouse) override
     {
+      if (usagi::geometry::contain(
+              usagi::geometry::from_height(frame(), kKnobSize * 4.f),
+              point_type{mouse.x, mouse.y}))
+      {
+        listener.reset();
+      }
     }
 
   private:

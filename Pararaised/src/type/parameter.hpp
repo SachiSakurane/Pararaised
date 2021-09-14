@@ -33,6 +33,7 @@ namespace type
     void raw_set(double v) const { setter(get_iparam(), v); }
     void set_normalized(type::normalized<double> v) const { normalized_setter(get_iparam(), v); }
     void send() const { sender(normalized()); }
+    void reset() const { get_iparam()->SetToDefault(); }
 
   private:
     const std::function<iplug::IParam *()> get_param;
