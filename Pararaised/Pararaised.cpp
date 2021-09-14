@@ -36,10 +36,6 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 #endif
 }
 
-void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
-{
-}
-
 #if IPLUG_DSP
 void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
@@ -53,9 +49,5 @@ void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames
       outputs[c][s] = inputs[c][s] * gain;
     }
   }
-}
-
-void PLUG_CLASS_NAME::OnReset()
-{
 }
 #endif
