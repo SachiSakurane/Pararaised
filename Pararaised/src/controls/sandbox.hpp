@@ -45,7 +45,7 @@ namespace controls
       );
 
       view.add_sub_view(views::slider{
-          usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f), action});
+          usagi::geometry::from_top(usagi::geometry::padding(view.frame(), 16.f), 4.f), action.gain()});
     }
 
   private:

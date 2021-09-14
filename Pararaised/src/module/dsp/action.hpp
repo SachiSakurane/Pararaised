@@ -5,6 +5,7 @@
 
 #include <riw/rxcpp.hpp>
 #include <riw/utility/noncopyable.hpp>
+#include <riw/utility/nonmovable.hpp>
 
 #include "../../type/unit.hpp"
 
@@ -16,20 +17,47 @@ namespace module::dsp
     kNumParameters
   };
 
+  template <class ValueType>
+  class memo
+  {
+  public:
+    using value_type = ValueType;
+
+    explicit memo(const rxcpp::subjects::behavior<ValueType> &behavior)
+        : memo_value{behavior.get_value()}, observable{behavior.get_observable()}, subscriber{behavior.get_subscriber()}
+    {
+      observable.subscribe([&](auto v)
+                           { write_memo(v); }) |
+          riw::disposed(bag);
+    }
+
+    decltype(auto) operator()() const
+    {
+      return memo_value;
+    }
+
+    void update(ValueType v) const { subscriber.on_next(v); }
+    void write_memo(ValueType v) { memo_value = v; }
+
+    const rxcpp::observable<ValueType> observable;
+
+  private:
+    riw::dispose_bag bag;
+    ValueType memo_value;
+    const rxcpp::subscriber<ValueType> subscriber;
+  };
+
   template <class StoreType, class SampleType>
   class action : private riw::noncopyable<action<StoreType, SampleType>>
   {
   public:
     explicit action(const StoreType &s) : store{s}
     {
-      store.gain.get_observable().subscribe([&memo = this->memo_gain](auto v)
-                                            { memo = v; }) |
-          riw::disposed(bag);
     }
 
     void set_parameter(std::function<void(module::dsp::parameters, type::normalized<SampleType>)> func)
     {
-      store.gain.get_observable().distinct_until_changed().subscribe(
+      memo_gain.observable.distinct_until_changed().subscribe(
           [func](auto gain)
           {
             func(parameters::kGain, gain);
@@ -42,23 +70,18 @@ namespace module::dsp
       switch (index)
       {
       case parameters::kGain:
-        memo_gain = normalized;
+        memo_gain.write_memo(normalized);
         break;
       default:
         break;
       }
     }
 
-    void update_gain(type::normalized<SampleType> v) const
-    {
-      store.gain.get_subscriber().on_next(v);
-    }
-
-    decltype(auto) gain() const { return memo_gain; }
+    const memo<type::normalized<SampleType>> &gain() const { return memo_gain; }
 
   private:
     riw::dispose_bag bag;
     const StoreType &store;
-    type::normalized<SampleType> memo_gain{store.gain.get_value()};
+    memo<type::normalized<SampleType>> memo_gain{store.gain};
   };
 }

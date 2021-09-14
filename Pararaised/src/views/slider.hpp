@@ -14,8 +14,18 @@
 
 namespace views
 {
+  template <class SliderListener>
+  concept slider_listener = requires(const SliderListener &listener)
+  {
+    typename SliderListener::value_type;
+    {
+      listener()
+      } -> std::same_as<typename SliderListener::value_type>;
+    listener.update(std::declval<typename SliderListener::value_type>());
+  };
+
   // knob ないやつは progress かも
-  template <class ActionType>
+  template <slider_listener ListenerType>
   class slider final : public usagi::wrapper::icontrol::iplug_traits::base_view_type
   {
     using traits_type = usagi::wrapper::icontrol::iplug_traits;
@@ -25,11 +35,11 @@ namespace views
     using rect_type = traits_type::base_view_type::rect_type;
     using draw_context_type = traits_type::base_view_type::draw_context_type;
 
-    slider(const usagi::concepts::geometry::rect_concept auto &frame, const ActionType& a) : traits_type::base_view_type{frame}, action{a}
+    slider(const usagi::concepts::geometry::rect_concept auto &frame, const ListenerType &l) : traits_type::base_view_type{frame}, listener{l}
     {
     }
 
-    traits_type::value_type get_proportion() { return action.gain(); }
+    traits_type::value_type get_proportion() { return listener(); }
 
     void draw(draw_context_type &context) override
     {
@@ -124,13 +134,16 @@ namespace views
     }
 
   private:
-    const ActionType& action;
+    const ListenerType &listener;
     bool is_click{false};
 
     void position_to_proportion(traits_type::value_type p)
     {
       auto new_proportion = std::clamp((p - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
-      action.update_gain(new_proportion);
+      listener.update(new_proportion);
     }
   };
+
+  template <slider_listener ListenerType>
+  slider(const usagi::concepts::geometry::rect_concept auto &, const ListenerType &) -> slider<ListenerType>;
 }
