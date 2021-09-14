@@ -23,7 +23,7 @@ namespace module::dsp
   public:
     using value_type = ValueType;
 
-    explicit memo(const rxcpp::subjects::behavior<ValueType> &behavior)
+    explicit memo(const rxcpp::subjects::behavior<value_type> &behavior)
         : memo_value{behavior.get_value()}, observable{behavior.get_observable()}, subscriber{behavior.get_subscriber()}
     {
       observable.subscribe([&](auto v)
@@ -31,20 +31,20 @@ namespace module::dsp
           riw::disposed(bag);
     }
 
-    decltype(auto) operator()() const
+    value_type operator()() const
     {
       return memo_value;
     }
 
-    void update(ValueType v) const { subscriber.on_next(v); }
-    void write_memo(ValueType v) { memo_value = v; }
+    void update(value_type v) const { subscriber.on_next(v); }
+    void write_memo(value_type v) { memo_value = v; }
 
-    const rxcpp::observable<ValueType> observable;
+    const rxcpp::observable<value_type> observable;
 
   private:
     riw::dispose_bag bag;
-    ValueType memo_value;
-    const rxcpp::subscriber<ValueType> subscriber;
+    value_type memo_value;
+    const rxcpp::subscriber<value_type> subscriber;
   };
 
   template <class StoreType, class SampleType>
