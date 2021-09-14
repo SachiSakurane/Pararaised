@@ -5,18 +5,11 @@
 
 #include <riw/rxcpp.hpp>
 #include <riw/utility/noncopyable.hpp>
-#include <riw/utility/nonmovable.hpp>
 
 #include "../../type/unit.hpp"
 
 namespace module::dsp
 {
-  enum parameters : int
-  {
-    kGain = 0,
-    kNumParameters
-  };
-
   template <class ValueType>
   class memo
   {
@@ -55,12 +48,12 @@ namespace module::dsp
     {
     }
 
-    void set_parameter(std::function<void(module::dsp::parameters, type::normalized<SampleType>)> func)
+    void set_parameter(std::function<void(type::parameters, type::normalized<SampleType>)> func)
     {
       memo_gain.observable.distinct_until_changed().subscribe(
           [func](auto gain)
           {
-            func(parameters::kGain, gain);
+            func(type::parameters::kGain, gain);
           }) |
           riw::disposed(bag);
     }
@@ -69,7 +62,7 @@ namespace module::dsp
     {
       switch (index)
       {
-      case parameters::kGain:
+      case type::parameters::kGain:
         memo_gain.write_memo(normalized);
         break;
       default:

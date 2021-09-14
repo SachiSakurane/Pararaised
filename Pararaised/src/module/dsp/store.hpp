@@ -10,6 +10,9 @@ namespace module::dsp
   template <class SampleType>
   struct store : private riw::noncopyable<store<SampleType>>
   {
+    template <class Injector>
+    explicit store(Injector) {}
+
     const rxcpp::subjects::behavior<type::normalized<SampleType>> gain{static_cast<SampleType>(0)};
   };
 }

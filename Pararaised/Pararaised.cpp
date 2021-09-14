@@ -5,12 +5,16 @@
 #include "src/controls/sandbox.hpp"
 #include "src/controls/anime_test.hpp"
 
-PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
-    : Plugin(info, MakeConfig(module::dsp::parameters::kNumParameters, 0))
-{
-  GetParam(module::dsp::parameters::kGain)->InitDouble("Gain", 75., 0., 100.0, 0.01, "%");
+#include "src/module/injector.hpp"
 
-  action.set_parameter([&](module::dsp::parameters index, type::normalized<sample> normalized)
+PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
+    : Plugin(info, MakeConfig(type::parameters::kNumParameters, 0)),
+      store{module::injector{.get_iparam = [&](type::parameters index)
+                             { return GetParam(index); }}}
+{
+  GetParam(type::parameters::kGain)->InitDouble("Gain", 75., 0., 100.0, 0.01, "%");
+
+  action.set_parameter([&](type::parameters index, type::normalized<sample> normalized)
                        { SendParameterValueFromUI(index, normalized); });
 
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
@@ -43,7 +47,7 @@ void PLUG_CLASS_NAME::OnParamChange(int paramIdx)
 #if IPLUG_DSP
 void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
-  const double gain = GetParam(module::dsp::parameters::kGain)->Value() / 100.;
+  const double gain = GetParam(type::parameters::kGain)->Value() / 100.;
   const int channels = NOutChansConnected();
 
   for (int s = 0; s < frames; s++)
