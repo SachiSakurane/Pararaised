@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <riw/utility/noncopyable.hpp>
 #include <usagi/utility/floating_point.hpp>
 
@@ -10,6 +12,7 @@ namespace type
   enum parameters : int
   {
     kGain = 0,
+    kPan,
     kNumParameters
   };
 

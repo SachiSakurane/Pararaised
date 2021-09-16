@@ -13,18 +13,58 @@
 
 namespace controls
 {
-  class anime_test : public usagi::wrapper::icontrol::view_wrapper, private riw::noncopyable<anime_test>
+  class layered_test : public usagi::wrapper::icontrol::view_wrapper, private riw::noncopyable<anime_test>
   {
     using traits_type = usagi::wrapper::icontrol::iplug_traits;
 
   public:
-    explicit anime_test(const IRECT &bounds) : usagi::wrapper::icontrol::view_wrapper{bounds}
+    explicit layered_test(const IRECT &bounds) : usagi::wrapper::icontrol::view_wrapper{bounds}
     {
       auto f = local_view.frame();
       auto padding = usagi::geometry::padding(f, 16.f);
 
-      local_view.add_sub_view(
-          traits_type::base_view_type{usagi::geometry::from_top(padding, 100.f)} |
+      auto &view0 = local_view.add_sub_view(
+          traits_type::base_view_type{padding} |
+          usagi::ui::surfaced(
+              [](auto &context, const auto &v)
+              {
+                SkAutoCanvasRestore restore{&context, true};
+                context.saveLayer(nullptr, nullptr);
+
+                SkPaint paint;
+                paint.setColor(SK_ColorRED);
+                context.drawRect(usagi::wrapper::skia::to_rect(v.frame()), paint);
+              })
+      );
+
+      auto &view1 = view0.add_sub_view(
+          traits_type::base_view_type{usagi::geometry::padding(view0.frame(), 16.f)} |
+          usagi::ui::surfaced(
+              [](auto &context, const auto &v)
+              {
+                SkAutoCanvasRestore restore{&context, true};
+                context.saveLayer(nullptr, nullptr);
+
+                SkPaint paint;
+                paint.setColor(SK_ColorGREEN);
+                context.drawRect(usagi::wrapper::skia::to_rect(v.frame()), paint);
+              }));
+
+      auto &view2 = view1.add_sub_view(
+          traits_type::base_view_type{usagi::geometry::padding(view1.frame(), 16.f)} |
+          usagi::ui::surfaced(
+              [](auto &context, const auto &v)
+              {
+                SkAutoCanvasRestore restore{&context, true};
+                context.saveLayer(nullptr, nullptr);
+
+                SkPaint paint;
+                paint.setColor(SK_ColorLTGRAY);
+                context.drawRect(usagi::wrapper::skia::to_rect(v.frame()), paint);
+              }));
+
+      view2.add_sub_view(
+          traits_type::base_view_type{usagi::geometry::from_top(view2.frame(), 100.f)} |
           usagi::ui::surfaced(
               [&animator = this->animator](auto &context, const auto &v)
               {
@@ -38,8 +78,8 @@ namespace controls
                 context.drawRect(SkRect::MakeXYWH(frame.l() + (frame.size().width() - 100.f) * animator.get_animation(), frame.t(), 100.f, 100.f), paint);
               }));
 
-      local_view.add_sub_view(
-          traits_type::base_view_type{usagi::geometry::from_bottom(padding, 100.f)} |
+      view2.add_sub_view(
+          traits_type::base_view_type{usagi::geometry::from_bottom(view2.frame(), 100.f)} |
           usagi::ui::surfaced(
               [&animator = this->animator](auto &context, const auto &v)
               {

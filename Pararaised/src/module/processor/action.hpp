@@ -12,7 +12,8 @@ namespace module::processor
     {
     }
 
-    const type::parameter<SampleType>& get_gain() const { return store.gain; }
+    const auto &get_gain() const { return store.gain; }
+    const auto &get_pan() const { return store.pan; }
 
   private:
     const StoreType &store;

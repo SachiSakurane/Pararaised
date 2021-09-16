@@ -2,8 +2,9 @@
 #include "IPlug_include_in_plug_src.h"
 #include "IControls.h"
 
-#include "src/controls/sandbox.hpp"
 #include "src/controls/anime_test.hpp"
+#include "src/controls/layered_test.hpp"
+#include "src/controls/sandbox.hpp"
 
 #include "src/module/injector.hpp"
 
@@ -31,7 +32,8 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 
     const IRECT b = pGraphics->GetBounds();
     pGraphics->AttachControl(new controls::sandbox{action, b});
-    // pGraphics->AttachControl(new controls::box{b});
+    // pGraphics->AttachControl(new controls::layered_test{b});
+    // pGraphics->AttachControl(new controls::anime_test{b});
   };
 #endif
 }
@@ -40,13 +42,22 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
   const double gain = GetParam(type::parameters::kGain)->Value() / 100.;
+  const double pan = GetParam(type::parameters::kPan)->Value();
   const int channels = NOutChansConnected();
 
-  for (int s = 0; s < frames; s++)
-  {
-    for (int c = 0; c < channels; c++)
+  if (channels == 2) {
+    for (int s = 0; s < frames; s++)
     {
-      outputs[c][s] = inputs[c][s] * gain;
+      outputs[0][s] = inputs[0][s] * gain * std::clamp(1. + pan, 0., 1.);
+      outputs[1][s] = inputs[1][s] * gain * std::clamp(1. - pan, 0., 1.);
+    }
+  } else {
+    for (int s = 0; s < frames; s++)
+    {
+      for (int c = 0; c < channels; c++)
+      {
+        outputs[c][s] = inputs[c][s] * gain;
+      }
     }
   }
 }

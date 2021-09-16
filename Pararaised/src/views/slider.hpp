@@ -62,7 +62,7 @@ namespace views
 
       // colored
       src.setColor(SK_ColorGRAY);
-      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::reduce_from_right(f, riw::inverse(get_proportion()) * width)), src);
+      context.drawRect(usagi::wrapper::skia::to_rect(usagi::geometry::from_right(f, riw::inverse(get_proportion()) * width)), src);
 
       // knob
       SkPaint knob;
@@ -105,25 +105,19 @@ namespace views
           auto f = frame();
           g->MoveMouseCursor(p * f.size().width() + f.l(), f.center().y());
           g->HideMouseCursor(false);
-          g->SetMouseCursor(ECursor::HAND);
         }
       }
     }
 
     void event(typename mouse_traits::on_over_type mouse) override
     {
-      if (auto g = mouse.graphics)
+
+      if (auto g = mouse.graphics; g && usagi::geometry::contain(
+                                            usagi::geometry::from_height(frame(), kKnobSize * 4.f),
+                                            point_type{mouse.x, mouse.y}))
       {
-        if (usagi::geometry::contain(
-                usagi::geometry::from_height(frame(), kKnobSize * 4.f),
-                point_type{mouse.x, mouse.y}))
-        {
-          g->SetMouseCursor(ECursor::HAND);
-        }
-        else
-        {
-          g->SetMouseCursor();
-        }
+        std::cout << "on_over" << std::endl;
+        g->SetMouseCursor(ECursor::HAND);
       }
     }
 
@@ -131,6 +125,7 @@ namespace views
     {
       if (auto g = mouse.graphics)
       {
+        std::cout << "on_out" << std::endl;
         g->SetMouseCursor();
       }
     }
@@ -152,8 +147,11 @@ namespace views
     void position_to_proportion(traits_type::value_type p)
     {
       auto new_proportion = std::clamp((p - frame().l()) / frame().size().width(), static_cast<traits_type::value_type>(0), static_cast<traits_type::value_type>(1));
-      listener.set_normalized(new_proportion);
-      listener.send();
+      if (new_proportion != get_proportion())
+      {
+        listener.set_normalized(new_proportion);
+        listener.send();
+      }
     }
   };
 
