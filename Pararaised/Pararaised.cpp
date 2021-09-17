@@ -39,22 +39,35 @@ PLUG_CLASS_NAME::PLUG_CLASS_NAME(const InstanceInfo &info)
 }
 
 #if IPLUG_DSP
+void PLUG_CLASS_NAME::OnReset()
+{
+  std::cout << "on reset" << std::endl;
+  is_2ch = NOutChansConnected() == 2;
+}
+
+void PLUG_CLASS_NAME::OnActivate(bool active)
+{
+  std::cout << "on active" << std::endl;
+}
+
 void PLUG_CLASS_NAME::ProcessBlock(sample **inputs, sample **outputs, int frames)
 {
   const double gain = GetParam(type::parameters::kGain)->Value() / 100.;
-  const double pan = GetParam(type::parameters::kPan)->Value();
-  const int channels = NOutChansConnected();
 
-  if (channels == 2) {
+  if (is_2ch)
+  {
+    const double pan = GetParam(type::parameters::kPan)->Value();
     for (int s = 0; s < frames; s++)
     {
-      outputs[0][s] = inputs[0][s] * gain * std::clamp(1. + pan, 0., 1.);
-      outputs[1][s] = inputs[1][s] * gain * std::clamp(1. - pan, 0., 1.);
+      outputs[0][s] = inputs[0][s] * gain * std::clamp(1. - pan, 0., 1.);
+      outputs[1][s] = inputs[1][s] * gain * std::clamp(1. + pan, 0., 1.);
     }
-  } else {
+  }
+  else
+  {
     for (int s = 0; s < frames; s++)
     {
-      for (int c = 0; c < channels; c++)
+      for (int c = 0; c < NOutChansConnected(); c++)
       {
         outputs[c][s] = inputs[c][s] * gain;
       }

@@ -115,7 +115,8 @@ namespace views
 
     void event(typename mouse_traits::on_double_click_type mouse) override
     {
-        listener.reset();
+      listener.reset();
+      listener.send();
     }
 
   private:
