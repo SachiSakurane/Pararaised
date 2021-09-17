@@ -72,51 +72,35 @@ namespace views
 
     void event(typename mouse_traits::on_down_type mouse) override
     {
-      if (usagi::geometry::contain(
-              usagi::geometry::from_height(frame(), kKnobSize * 4.f),
-              point_type{mouse.x, mouse.y}))
+      position_to_proportion(mouse.x);
+      if (auto g = mouse.graphics)
       {
-        is_click = true;
-        position_to_proportion(mouse.x);
-        if (auto g = mouse.graphics)
-        {
-          g->HideMouseCursor(true, false);
-        }
+        g->HideMouseCursor(true, false);
       }
     }
 
     void event(typename mouse_traits::on_drag_type mouse) override
     {
-      if (is_click)
-      {
-        position_to_proportion(mouse.x);
-      }
+      position_to_proportion(mouse.x);
     }
 
     void event(typename mouse_traits::on_up_type mouse) override
     {
-      if (is_click)
+      position_to_proportion(mouse.x);
+
+      if (auto g = mouse.graphics)
       {
-        position_to_proportion(mouse.x);
-        is_click = false;
-        if (auto g = mouse.graphics)
-        {
-          float p = get_proportion();
-          auto f = frame();
-          g->MoveMouseCursor(p * f.size().width() + f.l(), f.center().y());
-          g->HideMouseCursor(false);
-        }
+        float p = get_proportion();
+        auto f = frame();
+        g->MoveMouseCursor(p * f.size().width() + f.l(), f.center().y());
+        g->HideMouseCursor(false);
       }
     }
 
     void event(typename mouse_traits::on_over_type mouse) override
     {
-
-      if (auto g = mouse.graphics; g && usagi::geometry::contain(
-                                            usagi::geometry::from_height(frame(), kKnobSize * 4.f),
-                                            point_type{mouse.x, mouse.y}))
+      if (auto g = mouse.graphics)
       {
-        std::cout << "on_over" << std::endl;
         g->SetMouseCursor(ECursor::HAND);
       }
     }
@@ -125,24 +109,17 @@ namespace views
     {
       if (auto g = mouse.graphics)
       {
-        std::cout << "on_out" << std::endl;
         g->SetMouseCursor();
       }
     }
 
     void event(typename mouse_traits::on_double_click_type mouse) override
     {
-      if (usagi::geometry::contain(
-              usagi::geometry::from_height(frame(), kKnobSize * 4.f),
-              point_type{mouse.x, mouse.y}))
-      {
         listener.reset();
-      }
     }
 
   private:
     const ListenerType &listener;
-    bool is_click{false};
 
     void position_to_proportion(traits_type::value_type p)
     {
